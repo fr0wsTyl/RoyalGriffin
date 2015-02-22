@@ -7,7 +7,7 @@ Royal Griffin is a team from TelerikAcademy 2015 C#Part2 teamwork.
  -         /Team members\
  - Alexander Markov @Github - fr0wsTyl
  - Kristian Terziev @Github - unknown
- - Ivan Nikolov @Github - unknown
+ - Ivan Nikolov @Github - Spurch
  - Asen Gruncharov @Github - unknown
  - Niko Roid @Github - unknown
  - Viktor Ivanov @Github - unknown
