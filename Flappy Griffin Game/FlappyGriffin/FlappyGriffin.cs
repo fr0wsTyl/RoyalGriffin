@@ -17,7 +17,7 @@ class testGriffin
         public char c;
     }
     // Method for printing a symbol on the console.
-    static void PrintOnPosition(int x, int y, char c, ConsoleColor color = ConsoleColor.Gray)
+    static void PrintOnPosition(int x, int y, string c, ConsoleColor color = ConsoleColor.Gray)
     {
         Console.SetCursorPosition(x, y); // Coordinates of cursor position.
         Console.ForegroundColor = color;
@@ -37,13 +37,13 @@ class testGriffin
         // Setting window size and removing scrollbars.
         int playFieldWidth = 10;
         Console.BufferHeight = Console.WindowHeight = 18;
-        Console.BufferWidth = Console.WindowWidth = 50;
+        Console.BufferWidth = Console.WindowWidth = 70;
 
         // Creating the Griffin.
         Object griffin = new Object();
-        griffin.c = 'G';                     // Griffin symbol.
+        griffin.c = 'G';                  // Griffin symbol.
         griffin.color = ConsoleColor.White;  // color.
-        griffin.x = 20;                      // Starting coordinates of the griffin.   
+        griffin.x = 10;                      // Starting coordinates of the griffin.   
         griffin.y = playFieldWidth / 2;
 
         Random randomGenerator = new Random();   // Gives a random number in given range
@@ -90,27 +90,49 @@ class testGriffin
                 }
             }
 
-            if (Console.KeyAvailable)                       // Checking if there is any key pressed.
+            if (Console.KeyAvailable) // Checking if there is any key pressed.
             {
                 ConsoleKeyInfo keyPressed = Console.ReadKey(true);
                 while (Console.KeyAvailable)
                 {
                     Console.ReadKey(true);
                 }
-                if (keyPressed.Key == ConsoleKey.UpArrow)   // Moving the griffin up.
+                if (keyPressed.Key == ConsoleKey.Spacebar) // Moving the griffin up. //@Updated (when player push enter button, the bird will move up)
                 {
-                    if (griffin.y - 1 >= 1)
+                    if (griffin.y - 2 >= 1)
                     {
-                        griffin.y -= 1;
+                        griffin.y -= 2;
                     }
-
                 }
-                else if (keyPressed.Key == ConsoleKey.DownArrow)   // Moving the griffin down.
+                //else if (keyPressed.Key == ConsoleKey.DownArrow)   // Moving the griffin down. //@Updated (Currently this is not needable to the game because the bird has to fall down repeatly)
+                //{
+                //    if (griffin.y + 1 < playFieldWidth)
+                //    {
+                //        griffin.y += 1;
+                //    }
+                //}
+            }
+            else //Added case in which is not available pressed key by player and the bird falls down by itself
+            {
+                if (griffin.y + 1 <= playFieldWidth)
                 {
-                    if (griffin.y + 1 < playFieldWidth)
+                    if (griffin.y + 1 == playFieldWidth)
                     {
-                        griffin.y += 1;
+                        rocks.Clear();         // If we hit a rock we start again from starting position.
+                        PrintOnPosition(griffin.x, griffin.y, "GAME OVER", ConsoleColor.Red); // switching symbol when rock is hitted.
+                        Console.Beep(500, 1000);                                      // sound when rock is hitted.
+                        PrintOnPosition(griffin.x-5, griffin.y -5, "Press any key to restart the game", ConsoleColor.White);
+                        Console.ReadKey();
+                        griffin.x = 10;   
+                        griffin.y = playFieldWidth / 2;
+                        lives--;
+
                     }
+                    else
+                    {
+                        griffin.y += 1;   
+                    }
+                    
                 }
             }
             List<Object> nextrocks = new List<Object>();     // Creating new list of moving objects and filling it with
@@ -158,38 +180,38 @@ class testGriffin
             if (rockHitted)
             {
                 rocks.Clear();         // If we hit a rock we start again from starting position.
-                PrintOnPosition(griffin.x, griffin.y, 'X', ConsoleColor.Red); // switching symbol when rock is hitted.
+                PrintOnPosition(griffin.x, griffin.y, "X", ConsoleColor.Red); // switching symbol when rock is hitted.
                 Console.Beep(500, 1000);                                      // sound when rock is hitted.
             }
             else if (moneyHitted)
             {
-                PrintOnPosition(griffin.x, griffin.y, 'G', ConsoleColor.Green);
+                PrintOnPosition(griffin.x, griffin.y, "G", ConsoleColor.Green);
 
             }
             else if (lifeHitted)
             {
-                PrintOnPosition(griffin.x, griffin.y, 'G', ConsoleColor.Yellow);
+                PrintOnPosition(griffin.x, griffin.y, "G", ConsoleColor.Yellow);
                 Console.Beep(1200, 200);
             }
             else
             {
-                PrintOnPosition(griffin.x, griffin.y, griffin.c, griffin.color);
+                PrintOnPosition(griffin.x, griffin.y, griffin.c.ToString(), griffin.color);
             }
             foreach (Object rock in rocks) // Printing the objects from the list of moving objects.
             {
-                PrintOnPosition(rock.x, rock.y, rock.c, rock.color);
+                PrintOnPosition(rock.x, rock.y, rock.c.ToString(), rock.color);
             }
             for (int i = 0; i < Console.WindowWidth; i++) // Drowing the play field borders.
             {
-                PrintOnPosition(i, playFieldWidth, '-', ConsoleColor.Green);
-                PrintOnPosition(i, 0, '-', ConsoleColor.Green);
+                PrintOnPosition(i, playFieldWidth, "-", ConsoleColor.Green);
+                PrintOnPosition(i, 0, "-", ConsoleColor.Green);
             }
             // Printing info.
             PrintStringOnPosition(2, 12, "Score: " + score);
             PrintStringOnPosition(2, 13, "Lives " + lives);
             PrintStringOnPosition(15, 12, "FLAPPY GRIFFIN", ConsoleColor.Magenta);
 
-            Thread.Sleep(250); // Slows down the program so we can see what happens on the screen. We can change the speed. 
+            Thread.Sleep(350); // Slows down the program so we can see what happens on the screen. We can change the speed. 
         }
     }
 }
