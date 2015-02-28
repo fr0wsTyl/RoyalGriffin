@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -93,7 +93,7 @@ class testGriffin
                 nextObstacle.y3 = 3;
                 nextObstacle.y4 = 4;
                 nextObstacle.y5 = playFieldWidth - 2;
-                nextObstacle.y6 = playFieldWidth -1;
+                nextObstacle.y6 = playFieldWidth - 1;
                 nextObstacle.c = "#";
                 Obstacles.Add(nextObstacle);
             }
@@ -263,4 +263,3 @@ class testGriffin
         }
     }
 }
-
