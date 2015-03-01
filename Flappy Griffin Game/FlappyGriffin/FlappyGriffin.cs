@@ -14,7 +14,7 @@ using System.IO;
 @[DONE] At least 10 methods (separating the application’s logic)
 @[DONE] At least 3 existing .NET classes (like System.Math or System.DateTime)
 @[UNDONE] At least 2 exception handlings
-@[UNDONE] At least 1 use of external text file
+@[DONE] At least 1 use of external text file
 
  */
 
@@ -96,11 +96,12 @@ class testGriffin
     }
 
     //Method for printing information about score and remaining lives
-    static void PrintInfo(long score, int lives)
+    static void PrintInfo(long score, int lives, long topScore)
     {
-        PrintStringOnPosition(2, 12, "Score: " + score);
-        PrintStringOnPosition(2, 13, "Lives " + lives);
-        PrintStringOnPosition(5, 16, "FLAPPY GRIFFIN", ConsoleColor.Magenta);
+        PrintStringOnPosition(2, 14, "Score: " + score);
+        PrintStringOnPosition(2, 15, "Lives: " + lives);
+        PrintStringOnPosition(2, 16, "Top score: " + topScore);
+        PrintStringOnPosition(7, 20, "FLAPPY GRIFFIN", ConsoleColor.Magenta);
     }
 
     //Generate different obstacles
@@ -195,6 +196,10 @@ class testGriffin
         int griffinY = playFieldWidth / 2;
         int lives = 5;
         long score = 0;
+        StreamReader reader = new StreamReader("top score.txt");
+        string topScoreString = reader.ReadLine();
+        reader.Close();
+        long topScore = long.Parse(topScoreString);
         int speed = 400;
         //Initializating griffin
         Object griffin = CreateGriffin(griffinHead, griffinX, griffinY);
@@ -266,6 +271,13 @@ class testGriffin
                     newObstacle.y6 == griffin.y))
                 {
                     obstacleHitted = true; // If we hit an obstacle we lose a life.
+                    if (score > topScore)
+                    {
+                        topScore = score;
+                        StreamWriter writer = new StreamWriter("top score.txt");
+                        writer.WriteLine(topScore);
+                        writer.Close();
+                    }
                     if (lives == 0)
                     {
                         return;        // If we lose our last life the game is over.
@@ -341,7 +353,7 @@ class testGriffin
                 PrintStringOnPosition(i, 0, "-", ConsoleColor.Blue);
             }
             // Printing info.
-            PrintInfo(score, lives);
+            PrintInfo(score, lives, topScore);
             Thread.Sleep(speed); // Slows down the program so we can see what happens on the screen. We can change the speed. 
         }
     }
