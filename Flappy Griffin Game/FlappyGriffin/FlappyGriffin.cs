@@ -75,6 +75,23 @@ class testGriffin
         Console.WriteLine(c);
     }
     
+    //Method for returning random value
+    static int ReturnRandomValue(int minRange, int maxRange)
+    {
+        int randomVal = 0;
+        Random randomGenerator = new Random(); // Gives a random number in given range /
+        randomVal = randomGenerator.Next(minRange, maxRange);
+        return randomVal;
+    }
+
+    //Method for printing information about score and remaining lives
+    static void PrintInfo(long score, int lives)
+    {
+        PrintStringOnPosition(2, 12, "Score: " + score);
+        PrintStringOnPosition(2, 13, "Lives " + lives);
+        PrintStringOnPosition(5, 16, "FLAPPY GRIFFIN", ConsoleColor.Magenta);
+    }
+
     //Main method
     static void Main()
     {
@@ -87,20 +104,19 @@ class testGriffin
         int griffinY = playFieldWidth/2;
         int lives = 5;
         long score = 0;
-
+        int speed = 400;
         //Initializating griffin
         Object griffin = CreateGriffin(griffinHead, griffinX, griffinY);
 
         //Initializating window size
         WindowsSize(playFieldWidth, height, width);
         
-        Random randomGenerator = new Random();   // Gives a random number in given range /
         List<Obstacle> Obstacles = new List<Obstacle>();
         
         while (true)
         {
             bool obstacleHitted = false;
-            int chance = randomGenerator.Next(0, 3);
+            int chance = ReturnRandomValue(0,5);
             // Random number generates different obstacle.
             if (chance == 0)
             {
@@ -112,7 +128,7 @@ class testGriffin
                 nextObstacle.y4 = 4;
                 nextObstacle.y5 = playFieldWidth - 2;
                 nextObstacle.y6 = playFieldWidth - 1;
-                nextObstacle.c = "#";
+                nextObstacle.c = "|";
                 Obstacles.Add(nextObstacle);
             }
             else if (chance == 1)
@@ -125,7 +141,7 @@ class testGriffin
                 nextObstacle.y4 = playFieldWidth - 3;
                 nextObstacle.y5 = playFieldWidth - 2;
                 nextObstacle.y6 = playFieldWidth - 1;
-                nextObstacle.c = "#";
+                nextObstacle.c = "|";
                 Obstacles.Add(nextObstacle);
             }
             else if (chance == 2)
@@ -138,7 +154,7 @@ class testGriffin
                 nextObstacle.y4 = 4;
                 nextObstacle.y5 = 5;
                 nextObstacle.y6 = playFieldWidth - 1;
-                nextObstacle.c = "#";
+                nextObstacle.c = "|";
                 Obstacles.Add(nextObstacle);
             }
             // Checking if there is any key pressed.
@@ -225,6 +241,7 @@ class testGriffin
                     {
                         lives--;       // If we still have lives we lose one life and the game continues.
                         score = 0;
+                        speed = 400;
                     }
                 }
                 // Checking if we have succesfully passed an obstacle.
@@ -237,8 +254,8 @@ class testGriffin
                     newObstacle.y6 != griffin.y)
                 {
                     score++;
+                    speed -= 10;
                 }
-
                 if (newObstacle.x > 0)
                 {
                     // When an object disappears from the screen a new one appears in starting position
@@ -260,7 +277,6 @@ class testGriffin
                 // sound when rock is hitted.
                 Console.Beep(100, 500);
             }
-
             else   // Printing the griffin.
             {
                 PrintStringOnPosition(griffin.x, griffin.y, griffin.c.ToString(), griffin.color);
@@ -277,11 +293,8 @@ class testGriffin
                 PrintStringOnPosition(i, 0, "-", ConsoleColor.Blue);
             }
             // Printing info.
-            PrintStringOnPosition(2, 12, "Score: " + score);
-            PrintStringOnPosition(2, 13, "Lives " + lives);
-            PrintStringOnPosition(5, 16, "FLAPPY GRIFFIN", ConsoleColor.Magenta);
-
-            Thread.Sleep(400); // Slows down the program so we can see what happens on the screen. We can change the speed. 
+            PrintInfo(score, lives);
+            Thread.Sleep(speed); // Slows down the program so we can see what happens on the screen. We can change the speed. 
         }
     }
 
