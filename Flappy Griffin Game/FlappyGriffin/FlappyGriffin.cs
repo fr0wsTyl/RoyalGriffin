@@ -63,9 +63,8 @@ class testGriffin
     static void Main()
     {
         // Setting window size and removing scrollbars.
-        int playFieldWidth = 11;
-        Console.BufferHeight = Console.WindowHeight = 18;
-        Console.BufferWidth = Console.WindowWidth = 25;
+
+        int playFieldWidth = SettingWindowsSize();
 
         // Creating the Griffin.
         Object griffin = new Object();
@@ -265,5 +264,13 @@ class testGriffin
 
             Thread.Sleep(300); // Slows down the program so we can see what happens on the screen. We can change the speed. 
         }
+    }
+
+    private static int SettingWindowsSize(int fieldwidth, int height, int width)
+    {
+        int playFieldWidth = 11;
+        Console.BufferHeight = Console.WindowHeight = height;
+        Console.BufferWidth = Console.WindowWidth = width;
+        return playFieldWidth;
     }
 }
