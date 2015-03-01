@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,6 +30,23 @@ class testGriffin
 
     }
 
+    //Setting window size
+    static void WindowsSize(int fieldWidth, int windowHeight, int windowWidth)
+    {
+        Console.BufferHeight = Console.WindowHeight = windowHeight;
+        Console.BufferWidth = Console.WindowWidth = windowWidth;
+    }
+    // Creating the Griffin.
+    static Object CreateGriffin(string griffin, int x, int y, ConsoleColor color = ConsoleColor.White)
+    {
+        Object griffinObj = new Object();
+        griffinObj.c = griffin;                  // Griffin symbol.
+        griffinObj.color = ConsoleColor.White;  // color.
+        griffinObj.x = x;                      // Starting coordinates of the griffin.   
+        griffinObj.y = y;
+        return griffinObj;
+    }
+
     // Method for printing a string on the console.
     static void PrintStringOnPosition(int x, int y, string c, ConsoleColor color = ConsoleColor.Gray)
     {
@@ -57,30 +74,29 @@ class testGriffin
         Console.SetCursorPosition(x, y6);
         Console.WriteLine(c);
     }
-
-
-
+    
+    //Main method
     static void Main()
     {
-        // Setting window size and removing scrollbars.
+        //Setting variables
         int playFieldWidth = 12;
         int height = 25;
         int width = 30;
-        WindowsSize(playFieldWidth, height, width);
-
-        // Creating the Griffin.
-        //Object griffin = CreatingGriffin(12, "G", 10, playFieldWidth/2);
-        Object griffin = new Object();
-        griffin.c = "G";                  // Griffin symbol.
-        griffin.color = ConsoleColor.White;  // color.
-        griffin.x = 10;                      // Starting coordinates of the griffin.   
-        griffin.y = playFieldWidth / 2;
-
-        Random randomGenerator = new Random();   // Gives a random number in given range
-        List<Obstacle> Obstacles = new List<Obstacle>();
+        string griffinHead = "G";
+        int griffinX = 10;
+        int griffinY = playFieldWidth/2;
         int lives = 5;
         long score = 0;
 
+        //Initializating griffin
+        Object griffin = CreateGriffin(griffinHead, griffinX, griffinY);
+
+        //Initializating window size
+        WindowsSize(playFieldWidth, height, width);
+        
+        Random randomGenerator = new Random();   // Gives a random number in given range /
+        List<Obstacle> Obstacles = new List<Obstacle>();
+        
         while (true)
         {
             bool obstacleHitted = false;
@@ -269,19 +285,5 @@ class testGriffin
         }
     }
 
-    //private static Object CreatingGriffin(int playFieldWidth, string symbol, int x, int y, ConsoleColor color = ConsoleColor.White)
-    //{
-    //    Object griffin = new Object();
-    //    griffin.c = symbol;                  // Griffin symbol.
-    //    griffin.color = color;  // color.
-    //    griffin.x = x;                      // Starting coordinates of the griffin.   
-    //    griffin.y = y;
-    //    return griffin;
-    //}
-
-    static void WindowsSize(int fieldWidth, int windowHeight, int windowWidth)
-    {   
-        Console.BufferHeight = Console.WindowHeight = windowHeight;
-        Console.BufferWidth = Console.WindowWidth = windowWidth;
-    }
+    
 }
