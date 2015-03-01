@@ -6,6 +6,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
 
+/*
+ * 
+ * TeamWork Requirements
+@[UNDONE] At least 1 multi-dimensional array
+@[UNDONE] At least 3 one-dimensional arrays
+@[DONE] At least 10 methods (separating the application’s logic)
+@[DONE] At least 3 existing .NET classes (like System.Math or System.DateTime)
+@[UNDONE] At least 2 exception handlings
+@[UNDONE] At least 1 use of external text file
+
+ */
 
 class testGriffin
 {
@@ -74,7 +85,7 @@ class testGriffin
         Console.SetCursorPosition(x, y6);
         Console.WriteLine(c);
     }
-    
+
     //Method for returning random value
     static int ReturnRandomValue(int minRange, int maxRange)
     {
@@ -92,6 +103,86 @@ class testGriffin
         PrintStringOnPosition(5, 16, "FLAPPY GRIFFIN", ConsoleColor.Magenta);
     }
 
+    //Generate different obstacles
+
+    static void GenerateDifferentObstacles(int chance, int playFieldWidth, List<Obstacle> Obstacles)
+    {
+        if (chance == 0)
+        {
+            Obstacle nextObstacle = new Obstacle();
+            nextObstacle.x = Console.WindowWidth;
+            nextObstacle.y1 = 1;
+            nextObstacle.y2 = 2;
+            nextObstacle.y3 = 3;
+            nextObstacle.y4 = 4;
+            nextObstacle.y5 = playFieldWidth - 2;
+            nextObstacle.y6 = playFieldWidth - 1;
+            nextObstacle.c = "|";
+            Obstacles.Add(nextObstacle);
+        }
+        else if (chance == 1)
+        {
+            Obstacle nextObstacle = new Obstacle();
+            nextObstacle.x = Console.WindowWidth;
+            nextObstacle.y1 = 1;
+            nextObstacle.y2 = 2;
+            nextObstacle.y3 = 3;
+            nextObstacle.y4 = playFieldWidth - 3;
+            nextObstacle.y5 = playFieldWidth - 2;
+            nextObstacle.y6 = playFieldWidth - 1;
+            nextObstacle.c = "|";
+            Obstacles.Add(nextObstacle);
+        }
+        else if (chance == 2)
+        {
+            Obstacle nextObstacle = new Obstacle();
+            nextObstacle.x = Console.WindowWidth;
+            nextObstacle.y1 = 1;
+            nextObstacle.y2 = 2;
+            nextObstacle.y3 = 3;
+            nextObstacle.y4 = 4;
+            nextObstacle.y5 = 5;
+            nextObstacle.y6 = playFieldWidth - 1;
+            nextObstacle.c = "|";
+            Obstacles.Add(nextObstacle);
+        }
+    }
+
+    //Method for checking if console key is available
+    static Object CheckGriffin(Object griffin, out ConsoleKeyInfo keyPressed)
+    {
+        keyPressed = Console.ReadKey(true);
+        while (Console.KeyAvailable)
+        {
+            Console.ReadKey(true);
+        }
+        // Moving the griffin up by pressing space.
+        if (keyPressed.Key == ConsoleKey.Spacebar)
+        {
+            if (griffin.y - 1 >= 1)
+            {
+                griffin.y -= 1;
+            }
+        }
+        return griffin;
+    }
+
+    //Changing obstacles positions
+    static Obstacle ChangeObstaclePosition(List<Obstacle> Obstacles, int i, out Obstacle oldObstacle)
+    {
+        oldObstacle = Obstacles[i];
+        Obstacle newObstacle = new Obstacle();
+        newObstacle.x = oldObstacle.x - 1;
+        newObstacle.y1 = oldObstacle.y1;
+        newObstacle.y2 = oldObstacle.y2;
+        newObstacle.y3 = oldObstacle.y3;
+        newObstacle.y4 = oldObstacle.y4;
+        newObstacle.y5 = oldObstacle.y5;
+        newObstacle.y6 = oldObstacle.y6;
+        newObstacle.c = oldObstacle.c;
+        return newObstacle;
+    }
+
     //Main method
     static void Main()
     {
@@ -101,7 +192,7 @@ class testGriffin
         int width = 30;
         string griffinHead = "G";
         int griffinX = 10;
-        int griffinY = playFieldWidth/2;
+        int griffinY = playFieldWidth / 2;
         int lives = 5;
         long score = 0;
         int speed = 400;
@@ -110,76 +201,26 @@ class testGriffin
 
         //Initializating window size
         WindowsSize(playFieldWidth, height, width);
-        
+
         List<Obstacle> Obstacles = new List<Obstacle>();
-        
+
         while (true)
         {
             bool obstacleHitted = false;
-            int chance = ReturnRandomValue(0,5);
+            int chance = ReturnRandomValue(0, 5);
             // Random number generates different obstacle.
-            if (chance == 0)
-            {
-                Obstacle nextObstacle = new Obstacle();
-                nextObstacle.x = Console.WindowWidth;
-                nextObstacle.y1 = 1;
-                nextObstacle.y2 = 2;
-                nextObstacle.y3 = 3;
-                nextObstacle.y4 = 4;
-                nextObstacle.y5 = playFieldWidth - 2;
-                nextObstacle.y6 = playFieldWidth - 1;
-                nextObstacle.c = "|";
-                Obstacles.Add(nextObstacle);
-            }
-            else if (chance == 1)
-            {
-                Obstacle nextObstacle = new Obstacle();
-                nextObstacle.x = Console.WindowWidth;
-                nextObstacle.y1 = 1;
-                nextObstacle.y2 = 2;
-                nextObstacle.y3 = 3;
-                nextObstacle.y4 = playFieldWidth - 3;
-                nextObstacle.y5 = playFieldWidth - 2;
-                nextObstacle.y6 = playFieldWidth - 1;
-                nextObstacle.c = "|";
-                Obstacles.Add(nextObstacle);
-            }
-            else if (chance == 2)
-            {
-                Obstacle nextObstacle = new Obstacle();
-                nextObstacle.x = Console.WindowWidth;
-                nextObstacle.y1 = 1;
-                nextObstacle.y2 = 2;
-                nextObstacle.y3 = 3;
-                nextObstacle.y4 = 4;
-                nextObstacle.y5 = 5;
-                nextObstacle.y6 = playFieldWidth - 1;
-                nextObstacle.c = "|";
-                Obstacles.Add(nextObstacle);
-            }
+            GenerateDifferentObstacles(chance, playFieldWidth, Obstacles);
             // Checking if there is any key pressed.
             if (Console.KeyAvailable)
             {
-                ConsoleKeyInfo keyPressed = Console.ReadKey(true);
-                while (Console.KeyAvailable)
-                {
-                    Console.ReadKey(true);
-                }
-                // Moving the griffin up by pressing space.
-                if (keyPressed.Key == ConsoleKey.Spacebar)
-                {
-                    if (griffin.y - 1 >= 1)
-                    {
-                        griffin.y -= 1;
-                    }
-                }
-
+                ConsoleKeyInfo keyPressed;
+                griffin = CheckGriffin(griffin, out keyPressed);
             }
             else //Added case in which if the player is not pressing the key the bird falls down by itself
             {
                 if (griffin.y + 1 <= playFieldWidth)
                 {
-                    if (griffin.y + 2 == playFieldWidth || griffin.y + 1 == playFieldWidth)
+                    if (griffin.y + 1 == playFieldWidth || griffin.y + 1 == playFieldWidth)
                     {
 
                         Obstacles.Clear();
@@ -201,7 +242,7 @@ class testGriffin
                     }
                     else
                     {
-                        griffin.y += 2;
+                        griffin.y += 1;
                     }
 
                 }
@@ -212,16 +253,8 @@ class testGriffin
             {
                 // the same objects but on their new positions.
 
-                Obstacle oldObstacle = Obstacles[i];
-                Obstacle newObstacle = new Obstacle();
-                newObstacle.x = oldObstacle.x - 1;
-                newObstacle.y1 = oldObstacle.y1;
-                newObstacle.y2 = oldObstacle.y2;
-                newObstacle.y3 = oldObstacle.y3;
-                newObstacle.y4 = oldObstacle.y4;
-                newObstacle.y5 = oldObstacle.y5;
-                newObstacle.y6 = oldObstacle.y6;
-                newObstacle.c = oldObstacle.c;
+                Obstacle oldObstacle;
+                var newObstacle = ChangeObstaclePosition(Obstacles, i, out oldObstacle);
                 // Checking if the griffin hits any moving objects.
 
                 if (newObstacle.x == griffin.x &&
@@ -254,7 +287,22 @@ class testGriffin
                     newObstacle.y6 != griffin.y)
                 {
                     score++;
-                    speed -= 10;
+                    if (speed < 300 && speed > 250)
+                    {
+                        speed -= 2;
+                    }
+                    else if (speed < 250 && speed > 200)
+                    {
+                        speed -= 1;
+                    }
+                    else if (speed < 200 && speed > 0)
+                    {
+                        speed -= 0;
+                    }
+                    else
+                    {
+                        speed -= 8;
+                    }
                 }
                 if (newObstacle.x > 0)
                 {
@@ -297,6 +345,4 @@ class testGriffin
             Thread.Sleep(speed); // Slows down the program so we can see what happens on the screen. We can change the speed. 
         }
     }
-
-    
 }
