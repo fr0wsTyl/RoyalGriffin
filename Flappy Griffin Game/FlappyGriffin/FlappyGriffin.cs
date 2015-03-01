@@ -39,9 +39,9 @@ class testGriffin
         Console.Write(c);
 
     }
+    // Creating method for printing the obstacles.
     static void PrintObstacle(int x, int y1, int y2, int y3, int y4, int y5, int y6, string c,
         ConsoleColor color = ConsoleColor.Green)
-    // Creating method for printing the obstacles.
     {
         Console.ForegroundColor = color;
         Console.SetCursorPosition(x, y1);
@@ -63,10 +63,13 @@ class testGriffin
     static void Main()
     {
         // Setting window size and removing scrollbars.
-
-        int playFieldWidth = SettingWindowsSize();
+        int playFieldWidth = 12;
+        int height = 25;
+        int width = 30;
+        WindowsSize(playFieldWidth, height, width);
 
         // Creating the Griffin.
+        //Object griffin = CreatingGriffin(12, "G", 10, playFieldWidth/2);
         Object griffin = new Object();
         griffin.c = "G";                  // Griffin symbol.
         griffin.color = ConsoleColor.White;  // color.
@@ -262,15 +265,23 @@ class testGriffin
             PrintStringOnPosition(2, 13, "Lives " + lives);
             PrintStringOnPosition(5, 16, "FLAPPY GRIFFIN", ConsoleColor.Magenta);
 
-            Thread.Sleep(300); // Slows down the program so we can see what happens on the screen. We can change the speed. 
+            Thread.Sleep(400); // Slows down the program so we can see what happens on the screen. We can change the speed. 
         }
     }
 
-    private static int SettingWindowsSize(int fieldwidth, int height, int width)
-    {
-        int playFieldWidth = 11;
-        Console.BufferHeight = Console.WindowHeight = height;
-        Console.BufferWidth = Console.WindowWidth = width;
-        return playFieldWidth;
+    //private static Object CreatingGriffin(int playFieldWidth, string symbol, int x, int y, ConsoleColor color = ConsoleColor.White)
+    //{
+    //    Object griffin = new Object();
+    //    griffin.c = symbol;                  // Griffin symbol.
+    //    griffin.color = color;  // color.
+    //    griffin.x = x;                      // Starting coordinates of the griffin.   
+    //    griffin.y = y;
+    //    return griffin;
+    //}
+
+    static void WindowsSize(int fieldWidth, int windowHeight, int windowWidth)
+    {   
+        Console.BufferHeight = Console.WindowHeight = windowHeight;
+        Console.BufferWidth = Console.WindowWidth = windowWidth;
     }
 }
