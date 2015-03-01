@@ -96,11 +96,12 @@ class testGriffin
     }
 
     //Method for printing information about score and remaining lives
-    static void PrintInfo(long score, int lives, long topScore)
+    static void PrintInfo(long score, int lives, long topScore, string userNameBestScore, string userName)
     {
+        PrintStringOnPosition(2, 13, "Player: " + userName);
         PrintStringOnPosition(2, 14, "Score: " + score);
         PrintStringOnPosition(2, 15, "Lives: " + lives);
-        PrintStringOnPosition(2, 16, "Top score: " + topScore);
+        PrintStringOnPosition(2, 16, "Top score: " + topScore + " by: " + userNameBestScore);
         PrintStringOnPosition(7, 20, "FLAPPY GRIFFIN", ConsoleColor.Magenta);
     }
 
@@ -196,8 +197,11 @@ class testGriffin
         int griffinY = playFieldWidth / 2;
         int lives = 5;
         long score = 0;
+        Console.WriteLine("Enter your name: ");
+        string userName = Console.ReadLine();
         StreamReader reader = new StreamReader("top score.txt");
         string topScoreString = reader.ReadLine();
+        string userNameBestScore = reader.ReadLine();
         reader.Close();
         long topScore = long.Parse(topScoreString);
         int speed = 400;
@@ -273,9 +277,11 @@ class testGriffin
                     obstacleHitted = true; // If we hit an obstacle we lose a life.
                     if (score > topScore)
                     {
+                        userNameBestScore = userName;
                         topScore = score;
                         StreamWriter writer = new StreamWriter("top score.txt");
                         writer.WriteLine(topScore);
+                        writer.WriteLine(userName);
                         writer.Close();
                     }
                     if (lives == 0)
@@ -353,7 +359,7 @@ class testGriffin
                 PrintStringOnPosition(i, 0, "-", ConsoleColor.Blue);
             }
             // Printing info.
-            PrintInfo(score, lives, topScore);
+            PrintInfo(score, lives, topScore, userNameBestScore, userName);
             Thread.Sleep(speed); // Slows down the program so we can see what happens on the screen. We can change the speed. 
         }
     }
