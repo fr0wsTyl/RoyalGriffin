@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,7 +41,7 @@ class testGriffin
     }
     static void PrintObstacle(int x, int y1, int y2, int y3, int y4, int y5, int y6, string c,
         ConsoleColor color = ConsoleColor.Green)
-    // Creating method  for pronting the obsticles.
+    // Creating method for printing the obstacles.
     {
         Console.ForegroundColor = color;
         Console.SetCursorPosition(x, y1);
@@ -93,7 +93,7 @@ class testGriffin
                 nextObstacle.y3 = 3;
                 nextObstacle.y4 = 4;
                 nextObstacle.y5 = playFieldWidth - 2;
-                nextObstacle.y6 = playFieldWidth -1;
+                nextObstacle.y6 = playFieldWidth - 1;
                 nextObstacle.c = "#";
                 Obstacles.Add(nextObstacle);
             }
@@ -134,36 +134,40 @@ class testGriffin
                 // Moving the griffin up by pressing space.
                 if (keyPressed.Key == ConsoleKey.Spacebar)
                 {
-                    if (griffin.y - 2 >= 1)
+                    if (griffin.y - 1 >= 1)
                     {
-                        griffin.y -= 2;
+                        griffin.y -= 1;
                     }
                 }
 
             }
-            else //Added case in which is not available pressed key by player and the bird falls down by itself
+            else //Added case in which if the player is not pressing the key the bird falls down by itself
             {
                 if (griffin.y + 1 <= playFieldWidth)
                 {
-                    if (griffin.y + 1 == playFieldWidth)
+                    if (griffin.y + 2 == playFieldWidth || griffin.y + 1 == playFieldWidth)
                     {
 
                         Obstacles.Clear();
                         // If we hit an obstacle we start again from starting position.
                         // switching symbol when rock is hitted.
                         PrintStringOnPosition(griffin.x, griffin.y, "GAME OVER", ConsoleColor.Red);
-                        Console.Beep(500, 1000);                                      // sound when rock is hitted.
+                        Console.Beep(100, 500);                                      // sound when rock is hitted.
                         PrintStringOnPosition(griffin.x - 5, griffin.y - 5, "Press any key to restart the game",
                             ConsoleColor.White);
                         Console.ReadKey();
                         griffin.x = 10;
                         griffin.y = playFieldWidth / 2;
                         lives--;
+                        if (lives < 1)                         // Ends the game when you reach 0 lives from falling down.
+                        {
+                            return;
+                        }
 
                     }
                     else
                     {
-                        griffin.y += 1;
+                        griffin.y += 2;
                     }
 
                 }
@@ -195,7 +199,7 @@ class testGriffin
                     newObstacle.y6 == griffin.y))
                 {
                     obstacleHitted = true; // If we hit an obstacle we lose a life.
-                    if (lives < 1)
+                    if (lives == 0)
                     {
                         return;        // If we lose our last life the game is over.
                     }
@@ -236,7 +240,7 @@ class testGriffin
                 // switching symbol when rock is hitted
                 PrintStringOnPosition(griffin.x, griffin.y, "X", ConsoleColor.Red);
                 // sound when rock is hitted.
-                Console.Beep(500, 1000);
+                Console.Beep(100, 500);
             }
 
             else   // Printing the griffin.
@@ -249,7 +253,7 @@ class testGriffin
                     obstacle.c);
             }
 
-            for (int i = 0; i < Console.WindowWidth; i++) // Drowing the play field borders.
+            for (int i = 0; i < Console.WindowWidth; i++) // Drawing the play field borders.
             {
                 PrintStringOnPosition(i, playFieldWidth, "-", ConsoleColor.Blue);
                 PrintStringOnPosition(i, 0, "-", ConsoleColor.Blue);
@@ -263,4 +267,3 @@ class testGriffin
         }
     }
 }
-
