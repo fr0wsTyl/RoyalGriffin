@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,12 +16,14 @@ namespace FlappyGriffin
     @[UNDONE] At least 3 one-dimensional arrays
     @[DONE] At least 10 methods (separating the application’s logic)
     @[DONE] At least 3 existing .NET classes (like System.Math or System.DateTime)
-    @[UNDONE] At least 2 exception handlings
+    @[DONE] At least 2 exception handlings
     @[DONE] At least 1 use of external text file
 
      */
     class FlappyGriffin
-    { 
+    {
+        public static string TOP_SCORES_FILE = "..//..//Scores//TopScore.txt";
+
         //Main method
         static void Main()
         {
@@ -36,11 +38,38 @@ namespace FlappyGriffin
             long score = 0;
             Console.WriteLine("Enter your name: ");
             string userName = Console.ReadLine();
-            StreamReader reader = new StreamReader("..//..//Scores//TopScore.txt");
+            StreamReader reader = null;
+            // Exception 1
+            
+            try
+            {
+                reader = new StreamReader(FlappyGriffin.TOP_SCORES_FILE);
+            }
+            catch (Exception)
+            {
+                // no such file
+                StreamWriter sw = File.CreateText(FlappyGriffin.TOP_SCORES_FILE);
+                sw.WriteLine("0");
+                sw.WriteLine("Unknown");
+                sw.Close();
+                reader = new StreamReader(FlappyGriffin.TOP_SCORES_FILE);
+            }
+            
+            
             string topScoreString = reader.ReadLine();
             string userNameBestScore = reader.ReadLine();
             reader.Close();
             long topScore = long.Parse(topScoreString);
+            // Exception 2
+            try
+            {
+                topScore = long.Parse(topScoreString);
+            }
+            catch (Exception ex)
+            {
+                topScore = 0;
+            }
+
             int speed = 400;
             //Initializating griffin
             Objects griffin = Objects.CreateGriffin(griffinHead, griffinX, griffinY);
