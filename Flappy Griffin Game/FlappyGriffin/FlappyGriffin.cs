@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
+using System.Reflection;
 
 /*
  * 
@@ -198,8 +199,8 @@ class testGriffin
         int lives = 5;
         long score = 0;
         Console.WriteLine("Enter your name: ");
-        string userName = Console.ReadLine();
-        StreamReader reader = new StreamReader("top score.txt");
+        string userName = Console.ReadLine();      
+        StreamReader reader = new StreamReader("TopScores.txt");
         string topScoreString = reader.ReadLine();
         string userNameBestScore = reader.ReadLine();
         reader.Close();
