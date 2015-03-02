@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FlappyGriffin.cs" />
+    <Compile Include="GamePlay.cs" />
+    <Compile Include="Objects.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

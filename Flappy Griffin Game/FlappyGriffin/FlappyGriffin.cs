@@ -20,104 +20,8 @@ namespace FlappyGriffin
     @[DONE] At least 1 use of external text file
 
      */
-
-    class testGriffin
-    {
-
-        struct Object // Creating object with paramaters for coordinates, symbol and color.
-        {
-            public int x;
-            public int y;
-            public ConsoleColor color;
-            public string c;
-        }
-        
-
-        //Setting window size
-        static void WindowsSize(int fieldWidth, int windowHeight, int windowWidth)
-        {
-            Console.BufferHeight = Console.WindowHeight = windowHeight;
-            Console.BufferWidth = Console.WindowWidth = windowWidth;
-        }
-        // Creating the Griffin.
-        static Object CreateGriffin(string griffin, int x, int y, ConsoleColor color = ConsoleColor.White)
-        {
-            Object griffinObj = new Object();
-            griffinObj.c = griffin;                  // Griffin symbol.
-            griffinObj.color = ConsoleColor.White;  // color.
-            griffinObj.x = x;                      // Starting coordinates of the griffin.   
-            griffinObj.y = y;
-            return griffinObj;
-        }
-
-        // Method for printing a string on the console.
-        static void PrintStringOnPosition(int x, int y, string c, ConsoleColor color = ConsoleColor.Gray)
-        {
-
-            Console.SetCursorPosition(x, y); // Coordinates of cursor position.
-            Console.ForegroundColor = color;
-            Console.Write(c);
-
-        }
-        // Creating method for printing the obstacles.
-        static void PrintObstacle(int x, int y1, int y2, int y3, int y4, int y5, int y6, string c,
-            ConsoleColor color = ConsoleColor.Green)
-        {
-            Console.ForegroundColor = color;
-            Console.SetCursorPosition(x, y1);
-            Console.WriteLine(c);
-            Console.SetCursorPosition(x, y2);
-            Console.WriteLine(c);
-            Console.SetCursorPosition(x, y3);
-            Console.WriteLine(c);
-            Console.SetCursorPosition(x, y4);
-            Console.WriteLine(c);
-            Console.SetCursorPosition(x, y5);
-            Console.WriteLine(c);
-            Console.SetCursorPosition(x, y6);
-            Console.WriteLine(c);
-        }
-
-        //Method for returning random value
-        static int ReturnRandomValue(int minRange, int maxRange)
-        {
-            int randomVal = 0;
-            Random randomGenerator = new Random(); // Gives a random number in given range /
-            randomVal = randomGenerator.Next(minRange, maxRange);
-            return randomVal;
-        }
-
-        //Method for printing information about score and remaining lives
-        static void PrintInfo(long score, int lives, long topScore, string userNameBestScore, string userName)
-        {
-            PrintStringOnPosition(2, 13, "Player: " + userName);
-            PrintStringOnPosition(2, 14, "Score: " + score);
-            PrintStringOnPosition(2, 15, "Lives: " + lives);
-            PrintStringOnPosition(2, 16, "Top score: " + topScore + " by: " + userNameBestScore);
-            PrintStringOnPosition(7, 20, "FLAPPY GRIFFIN", ConsoleColor.Magenta);
-        }
-
-       
-        //Method for checking if console key is available
-        static Object CheckGriffin(Object griffin, out ConsoleKeyInfo keyPressed)
-        {
-            keyPressed = Console.ReadKey(true);
-            while (Console.KeyAvailable)
-            {
-                Console.ReadKey(true);
-            }
-            // Moving the griffin up by pressing space.
-            if (keyPressed.Key == ConsoleKey.Spacebar)
-            {
-                if (griffin.y - 1 >= 1)
-                {
-                    griffin.y -= 1;
-                }
-            }
-            return griffin;
-        }
-
-       
+    class FlappyGriffin
+    { 
         //Main method
         static void Main()
         {
@@ -139,24 +43,24 @@ namespace FlappyGriffin
             long topScore = long.Parse(topScoreString);
             int speed = 400;
             //Initializating griffin
-            Object griffin = CreateGriffin(griffinHead, griffinX, griffinY);
+            Objects griffin = Objects.CreateGriffin(griffinHead, griffinX, griffinY);
 
             //Initializating window size
-            WindowsSize(playFieldWidth, height, width);
+            GamePlay.WindowsSize(playFieldWidth, height, width);
 
             List<Obstacle> Obstacles = new List<Obstacle>();
 
             while (true)
             {
                 bool obstacleHitted = false;
-                int chance = ReturnRandomValue(0, 5);
+                int chance = GamePlay.ReturnRandomValue(0, 5);
                 // Random number generates different obstacle.
                 Obstacle.GenerateDifferentObstacles(chance, playFieldWidth, Obstacles);
                 // Checking if there is any key pressed.
                 if (Console.KeyAvailable)
                 {
                     ConsoleKeyInfo keyPressed;
-                    griffin = CheckGriffin(griffin, out keyPressed);
+                    griffin = Objects.CheckGriffin(griffin, out keyPressed);
                 }
                 else //Added case in which if the player is not pressing the key the bird falls down by itself
                 {
@@ -168,9 +72,9 @@ namespace FlappyGriffin
                             Obstacles.Clear();
                             // If we hit an obstacle we start again from starting position.
                             // switching symbol when rock is hitted.
-                            PrintStringOnPosition(griffin.x, griffin.y, "GAME OVER", ConsoleColor.Red);
+                            GamePlay.PrintStringOnPosition(griffin.x, griffin.y, "GAME OVER", ConsoleColor.Red);
                             Console.Beep(100, 500);                                      // sound when rock is hitted.
-                            PrintStringOnPosition(griffin.x - 5, griffin.y - 5, "Press any key to restart the game",
+                            GamePlay.PrintStringOnPosition(griffin.x - 5, griffin.y - 5, "Press any key to restart the game",
                                 ConsoleColor.White);
                             Console.ReadKey();
                             griffin.x = 10;
@@ -272,27 +176,27 @@ namespace FlappyGriffin
                     Obstacles.Clear();
 
                     // switching symbol when rock is hitted
-                    PrintStringOnPosition(griffin.x, griffin.y, "X", ConsoleColor.Red);
+                    GamePlay.PrintStringOnPosition(griffin.x, griffin.y, "X", ConsoleColor.Red);
                     // sound when rock is hitted.
                     Console.Beep(100, 500);
                 }
                 else   // Printing the griffin.
                 {
-                    PrintStringOnPosition(griffin.x, griffin.y, griffin.c.ToString(), griffin.color);
+                    GamePlay.PrintStringOnPosition(griffin.x, griffin.y, griffin.c.ToString(), griffin.color);
                 }
                 foreach (Obstacle obstacle in Obstacles) // Printing the obstacles.
                 {
-                    PrintObstacle(obstacle.x, obstacle.y1, obstacle.y2, obstacle.y3, obstacle.y4, obstacle.y5, obstacle.y6,
+                    Obstacle.PrintObstacle(obstacle.x, obstacle.y1, obstacle.y2, obstacle.y3, obstacle.y4, obstacle.y5, obstacle.y6,
                         obstacle.c);
                 }
 
                 for (int i = 0; i < Console.WindowWidth; i++) // Drawing the play field borders.
                 {
-                    PrintStringOnPosition(i, playFieldWidth, "-", ConsoleColor.Blue);
-                    PrintStringOnPosition(i, 0, "-", ConsoleColor.Blue);
+                    GamePlay.PrintStringOnPosition(i, playFieldWidth, "-", ConsoleColor.Blue);
+                    GamePlay.PrintStringOnPosition(i, 0, "-", ConsoleColor.Blue);
                 }
                 // Printing info.
-                PrintInfo(score, lives, topScore, userNameBestScore, userName);
+                GamePlay.PrintInfo(score, lives, topScore, userNameBestScore, userName);
                 Thread.Sleep(speed); // Slows down the program so we can see what happens on the screen. We can change the speed. 
             }
         }
