@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,11 +9,44 @@ namespace FlappyGriffin
 {
     class GamePlay
     {
+        public static int playFieldWidth;
         //Setting window size
-        public static void WindowsSize(int fieldWidth, int windowHeight, int windowWidth)
+        public static void WindowsSize(string ConfigFile)
         {
-            Console.BufferHeight = Console.WindowHeight = windowHeight;
-            Console.BufferWidth = Console.WindowWidth = windowWidth;
+            StreamReader ConfigReader = null;
+            //We try to open and read the config file
+            try
+            {
+                ConfigReader = new StreamReader(ConfigFile);
+            }
+            catch (Exception)
+            {
+                /*
+                 * If there isn't such a file we create one and fill
+                 * it with default values.
+                 */
+                StreamWriter ConfigWriter = File.CreateText(ConfigFile);
+                ConfigWriter.WriteLine("playFieldWidth, 12");
+                ConfigWriter.WriteLine("height, 25");
+                ConfigWriter.WriteLine("width, 30");
+                ConfigWriter.Close();
+                ConfigReader = new StreamReader(ConfigFile);
+            }
+            /*
+             * We read the lines in the file and split them.
+             * By doing so we can easly get the values we need
+             * as they are stored at the second index of the string array.
+             */
+            string[] ConfigString = ConfigReader.ReadLine().Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            playFieldWidth = Int32.Parse(ConfigString[1]); ;
+
+            ConfigString = ConfigReader.ReadLine().Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            Console.BufferHeight = Console.WindowHeight = Int32.Parse(ConfigString[1]);
+
+            ConfigString = ConfigReader.ReadLine().Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            Console.BufferWidth = Console.WindowWidth = Int32.Parse(ConfigString[1]);
+            
+            ConfigReader.Close();
         }
 
         // Method for printing a string on the console.

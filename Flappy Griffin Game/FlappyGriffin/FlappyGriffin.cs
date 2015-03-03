@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,59 +23,54 @@ namespace FlappyGriffin
     class FlappyGriffin
     {
         public static string TOP_SCORES_FILE = "..//..//Scores//TopScore.txt";
-
+        public static string CONFIG_FILE = "..//..//Scores//Config.txt";
         //Main method
         static void Main()
         {
             //Setting variables
-            int playFieldWidth = 12;
-            int height = 25;
-            int width = 30;
-            string griffinHead = "G";
-            int griffinX = 10;
-            int griffinY = playFieldWidth / 2;
             int lives = 5;
             long score = 0;
             Console.WriteLine("Enter your name: ");
             string userName = Console.ReadLine();
-            StreamReader reader = null;
+            StreamReader ScoreReader = null;
             // Exception 1
-            
             try
             {
-                reader = new StreamReader(FlappyGriffin.TOP_SCORES_FILE);
+                ScoreReader = new StreamReader(FlappyGriffin.TOP_SCORES_FILE);
             }
             catch (Exception)
             {
                 // no such file
-                StreamWriter sw = File.CreateText(FlappyGriffin.TOP_SCORES_FILE);
-                sw.WriteLine("0");
-                sw.WriteLine("Unknown");
-                sw.Close();
-                reader = new StreamReader(FlappyGriffin.TOP_SCORES_FILE);
+                StreamWriter ScoreWriter = File.CreateText(FlappyGriffin.TOP_SCORES_FILE);
+                ScoreWriter.WriteLine("0");
+                ScoreWriter.WriteLine("Unknown");
+                ScoreWriter.Close();
+                ScoreReader = new StreamReader(FlappyGriffin.TOP_SCORES_FILE);
             }
-            
-            
-            string topScoreString = reader.ReadLine();
-            string userNameBestScore = reader.ReadLine();
-            reader.Close();
+            string topScoreString = ScoreReader.ReadLine();
+            string userNameBestScore = ScoreReader.ReadLine();
+            ScoreReader.Close();
             long topScore = long.Parse(topScoreString);
             // Exception 2
             try
             {
                 topScore = long.Parse(topScoreString);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 topScore = 0;
             }
 
             int speed = 400;
-            //Initializating griffin
-            Objects griffin = Objects.CreateGriffin(griffinHead, griffinX, griffinY);
 
             //Initializating window size
-            GamePlay.WindowsSize(playFieldWidth, height, width);
+            GamePlay.WindowsSize(CONFIG_FILE);
+
+            //Initializating griffin
+            string griffinHead = "G";
+            int griffinX = 10;
+            int griffinY = GamePlay.playFieldWidth / 2;
+            Objects griffin = Objects.CreateGriffin(griffinHead, griffinX, griffinY);
 
             List<Obstacle> Obstacles = new List<Obstacle>();
 
@@ -84,7 +79,7 @@ namespace FlappyGriffin
                 bool obstacleHitted = false;
                 int chance = GamePlay.ReturnRandomValue(0, 5);
                 // Random number generates different obstacle.
-                Obstacle.GenerateDifferentObstacles(chance, playFieldWidth, Obstacles);
+                Obstacle.GenerateDifferentObstacles(chance, GamePlay.playFieldWidth, Obstacles);
                 // Checking if there is any key pressed.
                 if (Console.KeyAvailable)
                 {
@@ -93,9 +88,9 @@ namespace FlappyGriffin
                 }
                 else //Added case in which if the player is not pressing the key the bird falls down by itself
                 {
-                    if (griffin.y + 1 <= playFieldWidth)
+                    if (griffin.y + 1 <= GamePlay.playFieldWidth)
                     {
-                        if (griffin.y + 1 == playFieldWidth || griffin.y + 1 == playFieldWidth)
+                        if (griffin.y + 1 == GamePlay.playFieldWidth || griffin.y + 1 == GamePlay.playFieldWidth)
                         {
 
                             Obstacles.Clear();
@@ -107,7 +102,7 @@ namespace FlappyGriffin
                                 ConsoleColor.White);
                             Console.ReadKey();
                             griffin.x = 10;
-                            griffin.y = playFieldWidth / 2;
+                            griffin.y = GamePlay.playFieldWidth / 2;
                             lives--;
                             if (lives < 1)                         // Ends the game when you reach 0 lives from falling down.
                             {
@@ -221,7 +216,7 @@ namespace FlappyGriffin
 
                 for (int i = 0; i < Console.WindowWidth; i++) // Drawing the play field borders.
                 {
-                    GamePlay.PrintStringOnPosition(i, playFieldWidth, "-", ConsoleColor.Blue);
+                    GamePlay.PrintStringOnPosition(i, GamePlay.playFieldWidth, "-", ConsoleColor.Blue);
                     GamePlay.PrintStringOnPosition(i, 0, "-", ConsoleColor.Blue);
                 }
                 // Printing info.
