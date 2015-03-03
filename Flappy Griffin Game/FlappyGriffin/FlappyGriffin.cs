@@ -32,15 +32,19 @@ namespace FlappyGriffin
             long score = 0;
             Console.WriteLine("Enter your name: ");
             string userName = Console.ReadLine();
+
             StreamReader ScoreReader = null;
-            // Exception 1
+            //We try to open the TopScores file
             try
             {
                 ScoreReader = new StreamReader(FlappyGriffin.TOP_SCORES_FILE);
             }
             catch (Exception)
             {
-                // no such file
+                /*
+                 * If there is no such file we create a new one and add
+                 * some default value.
+                 */
                 StreamWriter ScoreWriter = File.CreateText(FlappyGriffin.TOP_SCORES_FILE);
                 ScoreWriter.WriteLine("0");
                 ScoreWriter.WriteLine("Unknown");
@@ -50,7 +54,8 @@ namespace FlappyGriffin
             string topScoreString = ScoreReader.ReadLine();
             string userNameBestScore = ScoreReader.ReadLine();
             ScoreReader.Close();
-            long topScore = long.Parse(topScoreString);
+
+            long topScore;
             // Exception 2
             try
             {
@@ -60,15 +65,21 @@ namespace FlappyGriffin
             {
                 topScore = 0;
             }
-
-            int speed = 400;
-
-            //Initializating window size
+            /*
+             * Initializating the playfield window by reading
+             * settings from a config file.
+             */
             GamePlay.WindowsSize(CONFIG_FILE);
 
-            //Initializating griffin
+            /*
+             * Initializating the griffin.
+             */
             string griffinHead = "G";
             int griffinX = 10;
+            /*
+             * Here we use a GamePlay variable that 
+             * was initialized by the WindowsSize() method.
+             */
             int griffinY = GamePlay.playFieldWidth / 2;
             Objects griffin = Objects.CreateGriffin(griffinHead, griffinX, griffinY);
 
@@ -153,7 +164,7 @@ namespace FlappyGriffin
                         {
                             lives--;       // If we still have lives we lose one life and the game continues.
                             score = 0;
-                            speed = 400;
+                            GamePlay.speed = 400;
                         }
                     }
                     // Checking if we have succesfully passed an obstacle.
@@ -166,21 +177,21 @@ namespace FlappyGriffin
                         newObstacle.y6 != griffin.y)
                     {
                         score++;
-                        if (speed < 300 && speed > 250)
+                        if (GamePlay.speed < 300 && GamePlay.speed > 250)
                         {
-                            speed -= 2;
+                            GamePlay.speed -= 2;
                         }
-                        else if (speed < 250 && speed > 200)
+                        else if (GamePlay.speed < 250 && GamePlay.speed > 200)
                         {
-                            speed -= 1;
+                            GamePlay.speed -= 1;
                         }
-                        else if (speed < 200 && speed > 0)
+                        else if (GamePlay.speed < 200 && GamePlay.speed > 0)
                         {
-                            speed -= 0;
+                            GamePlay.speed -= 0;
                         }
                         else
                         {
-                            speed -= 8;
+                            GamePlay.speed -= 8;
                         }
                     }
                     if (newObstacle.x > 0)
@@ -221,7 +232,7 @@ namespace FlappyGriffin
                 }
                 // Printing info.
                 GamePlay.PrintInfo(score, lives, topScore, userNameBestScore, userName);
-                Thread.Sleep(speed); // Slows down the program so we can see what happens on the screen. We can change the speed. 
+                Thread.Sleep(GamePlay.speed); // Slows down the program so we can see what happens on the screen. We can change the speed. 
             }
         }
     }

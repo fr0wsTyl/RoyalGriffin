@@ -1,3 +1,4 @@
 playFieldWidth, 12
 height, 25
 width, 30
+speed, 400

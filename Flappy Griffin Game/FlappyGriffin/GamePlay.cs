@@ -9,7 +9,16 @@ namespace FlappyGriffin
 {
     class GamePlay
     {
+        /*
+         * An array to hold the game setting values we are going 
+         * to read from the config file at the WindowsSize().
+         */
+        static int[] GameSettings = new int[4];
+        //Variable that will store the with of the game field.
         public static int playFieldWidth;
+        //Variable that will store the speed of the game.
+        public static int speed;
+
         //Setting window size
         public static void WindowsSize(string ConfigFile)
         {
@@ -29,6 +38,7 @@ namespace FlappyGriffin
                 ConfigWriter.WriteLine("playFieldWidth, 12");
                 ConfigWriter.WriteLine("height, 25");
                 ConfigWriter.WriteLine("width, 30");
+                ConfigWriter.WriteLine("speed, 400");
                 ConfigWriter.Close();
                 ConfigReader = new StreamReader(ConfigFile);
             }
@@ -37,15 +47,21 @@ namespace FlappyGriffin
              * By doing so we can easly get the values we need
              * as they are stored at the second index of the string array.
              */
-            string[] ConfigString = ConfigReader.ReadLine().Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            playFieldWidth = Int32.Parse(ConfigString[1]); ;
-
-            ConfigString = ConfigReader.ReadLine().Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            Console.BufferHeight = Console.WindowHeight = Int32.Parse(ConfigString[1]);
-
-            ConfigString = ConfigReader.ReadLine().Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            Console.BufferWidth = Console.WindowWidth = Int32.Parse(ConfigString[1]);
-            
+            string[] ConfigString;
+            for (int i = 0; i < GameSettings.Length; i++)
+            {
+                ConfigString = ConfigReader.ReadLine().Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                GameSettings[i] = Int32.Parse(ConfigString[1]);
+            }
+            /*
+             * We use the values we got from the Config file to initialize the game field.
+             * We are using mediator values playFieldWidth and speed as they are more 
+             * intuitive to use rather than addressing the GameSettings array.
+             */
+            playFieldWidth =  GameSettings[0];
+            Console.BufferHeight = Console.WindowHeight = GameSettings[1];
+            Console.BufferWidth = Console.WindowWidth = GameSettings[2];
+            speed = GameSettings[3];
             ConfigReader.Close();
         }
 
