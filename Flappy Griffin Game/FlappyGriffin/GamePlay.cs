@@ -93,5 +93,40 @@ namespace FlappyGriffin
             PrintStringOnPosition(2, 16, "Top score: " + topScore + " by: " + userNameBestScore);
             PrintStringOnPosition(7, 20, "FLAPPY GRIFFIN", ConsoleColor.Magenta);
         }
+
+        /*
+         * A method that reads the top score of the player and returns
+         * both the name and the score as a string array.
+         */
+        public static string[] ReadScore()
+        {
+            string[] ScoreInfo = new string[2];
+            StreamReader ScoreReader = null;
+            //We try to open the TopScores file
+            try
+            {
+                ScoreReader = new StreamReader(FlappyGriffin.TOP_SCORES_FILE);
+            }
+            catch (Exception)
+            {
+                /*
+                 * If there is no such file we create a new one and add
+                 * some default value.
+                 */
+                StreamWriter ScoreWriter = File.CreateText(FlappyGriffin.TOP_SCORES_FILE);
+                ScoreWriter.WriteLine("0");
+                ScoreWriter.WriteLine("Unknown");
+                ScoreWriter.Close();
+                ScoreReader = new StreamReader(FlappyGriffin.TOP_SCORES_FILE);
+            }
+            //We loop thorugh the file to populate the array.
+            for (int i = 0; i < ScoreInfo.Length; i++)
+            {
+                ScoreInfo[i] = ScoreReader.ReadLine();
+            }
+            ScoreReader.Close();
+
+            return ScoreInfo;
+        }
     }
 }

@@ -32,28 +32,10 @@ namespace FlappyGriffin
             long score = 0;
             Console.WriteLine("Enter your name: ");
             string userName = Console.ReadLine();
-
-            StreamReader ScoreReader = null;
-            //We try to open the TopScores file
-            try
-            {
-                ScoreReader = new StreamReader(FlappyGriffin.TOP_SCORES_FILE);
-            }
-            catch (Exception)
-            {
-                /*
-                 * If there is no such file we create a new one and add
-                 * some default value.
-                 */
-                StreamWriter ScoreWriter = File.CreateText(FlappyGriffin.TOP_SCORES_FILE);
-                ScoreWriter.WriteLine("0");
-                ScoreWriter.WriteLine("Unknown");
-                ScoreWriter.Close();
-                ScoreReader = new StreamReader(FlappyGriffin.TOP_SCORES_FILE);
-            }
-            string topScoreString = ScoreReader.ReadLine();
-            string userNameBestScore = ScoreReader.ReadLine();
-            ScoreReader.Close();
+            
+            string[] ScoresInfo = GamePlay.ReadScore();
+            string topScoreString = ScoresInfo[0];
+            string userNameBestScore = ScoresInfo[1];
 
             long topScore;
             // Exception 2
