@@ -143,6 +143,9 @@ namespace FlappyGriffin
                 case "up":
                     player = new SoundPlayer(@"..\..\Music\Aii.wav");
                     break;
+                case "aplause":
+                    player = new SoundPlayer(@"..\..\Music\mk1-00320.wav");
+                    break;
             }
             player.PlaySync();
         }

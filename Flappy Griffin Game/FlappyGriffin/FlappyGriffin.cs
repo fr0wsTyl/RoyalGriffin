@@ -94,7 +94,8 @@ namespace FlappyGriffin
                             // If we hit an obstacle we start again from starting position.
                             // switching symbol when rock is hitted.
                             GamePlay.PrintStringOnPosition(griffin.x, griffin.y, "GAME OVER", ConsoleColor.Red);
-                            GamePlay.PlayMusic("crash");                                   // sound when rock is hitted.
+                            GamePlay.PlayMusic("crash");                                     // Sound when ground is hitted.
+                            GamePlay.PlayMusic("aplause");                                   // sound when game over.
                             GamePlay.PrintStringOnPosition(griffin.x - 5, griffin.y - 5, "Press any key to restart the game",
                                 ConsoleColor.White);
                             Console.ReadKey();
