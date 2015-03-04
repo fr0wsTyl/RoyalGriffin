@@ -14,11 +14,23 @@ namespace FlappyGriffin
          * An array to hold the game setting values we are going 
          * to read from the config file at the WindowsSize().
          */
-        static int[] GameSettings = new int[4];
+        static int[] GameSettings = new int[5];
         //Variable that will store the with of the game field.
         public static int playFieldWidth;
         //Variable that will store the speed of the game.
         public static int speed;
+        //Variable that will store the amount of lives in the game.
+        public static int lives;
+        //Variable that will store the current score during playing.
+        public static long score = 0;
+        //Variable to hold the current user name.
+        public static string userName;
+        //The user name with the best score.
+        public static string userNameBestScore;
+        //Variables that are related to the score.
+        private static string[] ScoresInfo;
+        public static string topScoreString;
+        public static long topScore;
 
         //Setting window size
         public static void WindowsSize(string ConfigFile)
@@ -63,9 +75,9 @@ namespace FlappyGriffin
             Console.BufferHeight = Console.WindowHeight = GameSettings[1];
             Console.BufferWidth = Console.WindowWidth = GameSettings[2];
             speed = GameSettings[3];
+            lives = GameSettings[4];
             ConfigReader.Close();
         }
-
         // Method for printing a string on the console.
         public static void PrintStringOnPosition(int x, int y, string c, ConsoleColor color = ConsoleColor.Gray)
         {
@@ -75,7 +87,6 @@ namespace FlappyGriffin
             Console.Write(c);
 
         }
-
         //Method for returning random value
         public static int ReturnRandomValue(int minRange, int maxRange)
         {
@@ -84,7 +95,6 @@ namespace FlappyGriffin
             randomVal = randomGenerator.Next(minRange, maxRange);
             return randomVal;
         }
-
         //Method for printing information about score and remaining lives
         public static void PrintInfo(long score, int lives, long topScore, string userNameBestScore, string userName)
         {
@@ -94,14 +104,13 @@ namespace FlappyGriffin
             PrintStringOnPosition(2, 16, "Top score: " + topScore + " by: " + userNameBestScore);
             PrintStringOnPosition(7, 20, "FLAPPY GRIFFIN", ConsoleColor.Magenta);
         }
-
         /*
          * A method that reads the top score of the player and returns
          * both the name and the score as a string array.
          */
         public static string[] ReadScore()
         {
-            string[] ScoreInfo = new string[2];
+            //string[] ScoreInfo = new string[2];
             StreamReader ScoreReader = null;
             //We try to open the TopScores file
             try
@@ -115,18 +124,42 @@ namespace FlappyGriffin
                  * some default value.
                  */
                 StreamWriter ScoreWriter = File.CreateText(FlappyGriffin.TOP_SCORES_FILE);
-                ScoreWriter.WriteLine("0");
-                ScoreWriter.WriteLine("Unknown");
+                ScoreWriter.WriteLine("Unknown, 0");
                 ScoreWriter.Close();
                 ScoreReader = new StreamReader(FlappyGriffin.TOP_SCORES_FILE);
             }
-            //We loop thorugh the file to populate the array.
-            for (int i = 0; i < ScoreInfo.Length; i++)
-            {
-                ScoreInfo[i] = ScoreReader.ReadLine();
-            }
+            string[] ScoreInfo = ScoreReader.ReadLine().Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
             ScoreReader.Close();
             return ScoreInfo;
+        }
+        public static void WriteScore(string ValueToWrite)
+        {
+            using (StreamWriter writer = new StreamWriter("..//..//Scores//TopScore.txt"))
+            {
+                writer.WriteLine(ValueToWrite);
+            }
+        }
+        public static void SetPlayerName()
+        {
+            Console.WriteLine("Enter your name: ");
+            userName = Console.ReadLine();
+        }
+        public static void InitializeScores()
+        {
+            ScoresInfo = GamePlay.ReadScore();
+            userNameBestScore = ScoresInfo[0];
+            topScoreString = ScoresInfo[1];
+            //We have an exception in case of a invalid value 
+            //written into the file.
+            try
+            {
+                topScore = long.Parse(GamePlay.topScoreString);
+            }
+            catch (Exception)
+            {
+                topScore = 0;
+            }
+
         }
         //Add sounds
         public static void PlayMusic(string whichSound)
