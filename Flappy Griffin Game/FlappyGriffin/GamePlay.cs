@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Media;
 
 namespace FlappyGriffin
 {
@@ -58,7 +59,7 @@ namespace FlappyGriffin
              * We are using mediator values playFieldWidth and speed as they are more 
              * intuitive to use rather than addressing the GameSettings array.
              */
-            playFieldWidth =  GameSettings[0];
+            playFieldWidth = GameSettings[0];
             Console.BufferHeight = Console.WindowHeight = GameSettings[1];
             Console.BufferWidth = Console.WindowWidth = GameSettings[2];
             speed = GameSettings[3];
@@ -125,8 +126,25 @@ namespace FlappyGriffin
                 ScoreInfo[i] = ScoreReader.ReadLine();
             }
             ScoreReader.Close();
-
             return ScoreInfo;
+        }
+        //Add sounds
+        public static void PlayMusic(string whichSound)
+        {
+            SoundPlayer player = new SoundPlayer();
+            switch (whichSound)
+            {
+                case "start":
+                    player = new SoundPlayer(@"..\..\Music\mk1-00368.wav");
+                    break;
+                case "crash":
+                    player = new SoundPlayer(@"..\..\Music\car crashing - sound effect_mp3cut.foxcom.su_.wav");
+                    break;
+                case "up":
+                    player = new SoundPlayer(@"..\..\Music\Aii.wav");
+                    break;
+            }
+            player.PlaySync();
         }
     }
 }

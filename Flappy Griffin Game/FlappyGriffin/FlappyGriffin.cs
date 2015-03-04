@@ -32,7 +32,7 @@ namespace FlappyGriffin
             long score = 0;
             Console.WriteLine("Enter your name: ");
             string userName = Console.ReadLine();
-            
+
             string[] ScoresInfo = GamePlay.ReadScore();
             string topScoreString = ScoresInfo[0];
             string userNameBestScore = ScoresInfo[1];
@@ -64,6 +64,8 @@ namespace FlappyGriffin
              */
             int griffinY = GamePlay.playFieldWidth / 2;
             Objects griffin = Objects.CreateGriffin(griffinHead, griffinX, griffinY);
+            GamePlay.PlayMusic("start");        //Start sound
+
 
             List<Obstacle> Obstacles = new List<Obstacle>();
 
@@ -77,6 +79,8 @@ namespace FlappyGriffin
                 if (Console.KeyAvailable)
                 {
                     ConsoleKeyInfo keyPressed;
+                    Console.Beep(1000,50);
+                    //GamePlay.PlayMusic("up");
                     griffin = Objects.CheckGriffin(griffin, out keyPressed);
                 }
                 else //Added case in which if the player is not pressing the key the bird falls down by itself
@@ -90,7 +94,7 @@ namespace FlappyGriffin
                             // If we hit an obstacle we start again from starting position.
                             // switching symbol when rock is hitted.
                             GamePlay.PrintStringOnPosition(griffin.x, griffin.y, "GAME OVER", ConsoleColor.Red);
-                            Console.Beep(100, 500);                                      // sound when rock is hitted.
+                            GamePlay.PlayMusic("crash");                                   // sound when rock is hitted.
                             GamePlay.PrintStringOnPosition(griffin.x - 5, griffin.y - 5, "Press any key to restart the game",
                                 ConsoleColor.White);
                             Console.ReadKey();
@@ -195,7 +199,7 @@ namespace FlappyGriffin
                     // switching symbol when rock is hitted
                     GamePlay.PrintStringOnPosition(griffin.x, griffin.y, "X", ConsoleColor.Red);
                     // sound when rock is hitted.
-                    Console.Beep(100, 500);
+                    GamePlay.PlayMusic("crash");
                 }
                 else   // Printing the griffin.
                 {
